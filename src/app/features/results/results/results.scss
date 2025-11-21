@@ -1,0 +1,9 @@
+table {
+  th, td {
+    text-align: left;
+  }
+
+  tr:hover {
+    background-color: #f3f4f6; // Tailwind gray-100
+  }
+}

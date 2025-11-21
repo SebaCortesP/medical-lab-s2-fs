@@ -1,0 +1,19 @@
+<div class="flex h-screen">
+  <!-- Menu lateral -->
+  <aside class="w-64 bg-gray-800 text-white p-4 flex flex-col">
+    <h2 class="text-xl font-bold mb-6">Mi App</h2>
+    <nav class="flex flex-col gap-2 flex-1">
+      <a routerLink="/home" routerLinkActive="bg-gray-700" class="p-2 rounded hover:bg-gray-700">Inicio</a>
+      <a *ngIf="role != 'ADMIN'" routerLink="/profile" routerLinkActive="bg-gray-700" class="p-2 rounded hover:bg-gray-700">Perfil</a>
+      <a *ngIf="role != 'ADMIN'" routerLink="/reservas" routerLinkActive="bg-gray-700" class="p-2 rounded hover:bg-gray-700">Mis Examenes</a>
+      <a *ngIf="role == 'ADMIN'" routerLink="/analyses" routerLinkActive="bg-gray-700" class="p-2 rounded hover:bg-gray-700">Gestion Analisis</a>
+      <a *ngIf="role == 'ADMIN'" routerLink="/labs" routerLinkActive="bg-gray-700" class="p-2 rounded hover:bg-gray-700">Laboratorios</a>
+    </nav>
+    <button (click)="logout()" class="mt-auto bg-red-600 hover:bg-red-700 p-2 rounded">Cerrar Sesión</button>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="flex-1 p-6 overflow-auto bg-gray-100">
+    <router-outlet></router-outlet>
+  </main>
+</div>

@@ -1,0 +1,16 @@
+/* Tailwind ya maneja la mayoría de estilos, pero puedes agregar extras aquí */
+
+/* Ejemplo: sombra del sidebar */
+aside {
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+/* Hover personalizado */
+a:hover {
+  cursor: pointer;
+}
+
+/* Botón cerrar sesión */
+button {
+  font-weight: bold;
+}

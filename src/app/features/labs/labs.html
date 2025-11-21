@@ -1,0 +1,46 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Gestión de Laboratorios</h2>
+  <div *ngIf="errorMsg" class="text-red-500 mb-2">{{ errorMsg }}</div>
+  <div *ngIf="successMsg" class="text-green-500 mb-2">{{ successMsg }}</div>
+  <!-- Crear Lab -->
+  <div class="mb-4 p-4 bg-white rounded shadow">
+    <h3 class="text-xl font-semibold mb-2">Crear Laboratorio</h3>
+    <input [(ngModel)]="newLab.name" placeholder="Nombre" class="border p-2 rounded mb-2 block w-full">
+    <input [(ngModel)]="newLab.address" placeholder="Dirección" class="border p-2 rounded mb-2 block w-full">
+    <input [(ngModel)]="newLab.phone" placeholder="Teléfono" class="border p-2 rounded mb-2 block w-full">
+    <button class="bg-blue-500 text-white px-3 py-1 rounded" (click)="createLab()">Crear</button>
+  </div>
+  <!-- Listar -->
+  <table class="table-auto w-full bg-white rounded shadow">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="px-2 py-1">Nombre</th>
+        <th class="px-2 py-1">Dirección</th>
+        <th class="px-2 py-1">Teléfono</th>
+        <th class="px-2 py-1">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lab of labs">
+        <td class="px-2 py-1">{{ lab.name }}</td>
+        <td class="px-2 py-1">{{ lab.address }}</td>
+        <td class="px-2 py-1">{{ lab.phone }}</td>
+        <td class="px-2 py-1">
+          <button class="bg-green-500 text-white px-2 py-1 rounded mr-2" (click)="editLab(lab)">Editar</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded" (click)="deleteLab(lab.id!)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Modal editar -->
+  <div *ngIf="selectedLab" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-4 w-96 rounded shadow">
+      <h3 class="text-xl font-bold mb-2">Editar Laboratorio</h3>
+      <input [(ngModel)]="selectedLab.name" class="border p-2 rounded mb-2 block w-full">
+      <input [(ngModel)]="selectedLab.address" class="border p-2 rounded mb-2 block w-full">
+      <input [(ngModel)]="selectedLab.phone" class="border p-2 rounded mb-2 block w-full">
+      <button class="bg-blue-500 text-white px-3 py-1 rounded mr-2" (click)="updateLab()">Guardar</button>
+      <button class="bg-red-500 text-white px-3 py-1 rounded" (click)="selectedLab = null">Cancelar</button>
+    </div>
+  </div>
+</div>

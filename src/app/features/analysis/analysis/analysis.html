@@ -1,0 +1,112 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Gestión de Análisis</h2>
+
+  <div *ngIf="errorMsg" class="text-red-500 mb-2">{{ errorMsg }}</div>
+  <div *ngIf="successMsg" class="text-green-500 mb-2">{{ successMsg }}</div>
+
+  <!-- Crear Análisis -->
+  <div class="mb-6 p-4 bg-white rounded shadow">
+    <h3 class="text-xl font-semibold mb-2">Crear Nuevo Análisis</h3>
+    <form
+      [formGroup]="createAnalysisForm"
+      (ngSubmit)="submitAnalysis()"
+      class="flex flex-col gap-2"
+    >
+      <label class="font-semibold">Nombre del análisis</label>
+      <input formControlName="name" placeholder="Ej: Hemograma" class="border p-2 rounded" />
+
+      <label class="font-semibold">Precio</label>
+      <input
+        formControlName="price"
+        type="number"
+        placeholder="Ej: 15000"
+        class="border p-2 rounded"
+      />
+
+      <label class="font-semibold">Duración (en minutos)</label>
+      <input
+        formControlName="durationMinutes"
+        type="number"
+        placeholder="Ej: 30"
+        class="border p-2 rounded"
+      />
+
+      <label class="font-semibold">Laboratorio</label>
+      <select formControlName="labId" class="border p-2 rounded">
+        <option value="">Seleccione Laboratorio</option>
+        <option *ngFor="let lab of labs" [value]="lab.id">{{ lab.name }}</option>
+      </select>
+
+      <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-2">
+        Crear Análisis
+      </button>
+    </form>
+  </div>
+
+  <!-- Listar Análisis -->
+  <div class="mb-6 p-4 bg-white rounded shadow">
+    <h3 class="text-xl font-semibold mb-2">Listado de Análisis</h3>
+    <table class="table-auto w-full">
+      <thead class="bg-gray-200">
+        <tr>
+          <th class="px-2 py-1">Nombre</th>
+          <th class="px-2 py-1">Precio</th>
+          <th class="px-2 py-1">Duración</th>
+          <th class="px-2 py-1">Laboratorio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let a of analyses">
+          <td class="px-2 py-1">{{ a.name }}</td>
+          <td class="px-2 py-1">{{ a.price }}</td>
+          <td class="px-2 py-1">{{ a.durationMinutes }} min</td>
+          <td class="px-2 py-1">{{ a.labName }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Crear Resultados -->
+  <div class="mb-6 p-4 bg-white rounded shadow">
+    <h3 class="text-xl font-semibold mb-2">Crear Resultado</h3>
+    <form [formGroup]="createResultForm" (ngSubmit)="submitResult()" class="flex flex-col gap-2">
+      <label class="font-semibold">Paciente</label>
+      <select formControlName="pacientId" class="border p-2 rounded">
+        <option value="">Seleccione Paciente</option>
+        <option *ngFor="let p of pacientes" [value]="p.id">{{ p.name }} {{ p.lastname }}</option>
+      </select>
+
+      <label class="font-semibold">Análisis</label>
+      <select formControlName="analysisId" class="border p-2 rounded">
+        <option value="">Seleccione Análisis</option>
+        <option *ngFor="let a of analyses" [value]="a.id">{{ a.name }}</option>
+      </select>
+
+      <label class="font-semibold">Laboratorio</label>
+      <select formControlName="labId" class="border p-2 rounded">
+        <option value="">Seleccione Laboratorio</option>
+        <option *ngFor="let lab of labs" [value]="lab.id">{{ lab.name }}</option>
+      </select>
+
+      <label class="font-semibold">Resultado</label>
+      <input formControlName="resultValue" placeholder="Ej: 350" class="border p-2 rounded" />
+
+      <label class="font-semibold">Detalles del resultado</label>
+      <input
+        formControlName="resultDetails"
+        placeholder="Ej: Valor fuera de rango"
+        class="border p-2 rounded"
+      />
+
+      <label class="font-semibold">Fecha del examen</label>
+      <input formControlName="resultDate" type="date" class="border p-2 rounded" />
+
+      <button
+        type="submit"
+        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2"
+      >
+        Crear Resultado
+      </button>
+    </form>
+  </div>
+</div>

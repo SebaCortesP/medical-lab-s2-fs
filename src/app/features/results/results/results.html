@@ -1,0 +1,53 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Resultados de Exámenes</h2>
+
+  <div *ngIf="loading" class="text-gray-500">Cargando...</div>
+  <div *ngIf="errorMsg" class="text-red-500 mb-2">{{ errorMsg }}</div>
+
+  <table *ngIf="!loading && results.length" class="table-auto w-full bg-white shadow rounded">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="px-4 py-2">Examen</th>
+        <th class="px-4 py-2">Laboratorio</th>
+        <th class="px-4 py-2">Resultado</th>
+        <th class="px-4 py-2">Fecha</th>
+        <th class="px-4 py-2">Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of results" class="border-b">
+        <td class="px-4 py-2">{{ r.analysisName }}</td>
+        <td class="px-4 py-2">{{ r.labName }}</td>
+        <td class="px-4 py-2">{{ r.resultValue }}</td>
+        <td class="px-4 py-2">{{ r.resultDate | date:'shortDate' }}</td>
+        <td class="px-4 py-2">
+          <button (click)="openModal(r)"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded">
+            Ver detalle
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && results.length === 0" class="text-gray-500">
+    No hay resultados disponibles.
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="selectedResult" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded shadow-lg w-96 p-4">
+    <h3 class="text-xl font-bold mb-2">Detalle del Examen</h3>
+    <p><strong>Examen:</strong> {{ selectedResult.analysisName }}</p>
+    <p><strong>Laboratorio:</strong> {{ selectedResult.labName }}</p>
+    <p><strong>Resultado:</strong> {{ selectedResult.resultValue }}</p>
+    <p><strong>Detalles:</strong> {{ selectedResult.resultDetails }}</p>
+    <p><strong>Fecha:</strong> {{ selectedResult.resultDate | date:'fullDate' }}</p>
+
+    <button (click)="closeModal()"
+            class="mt-4 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+      Cerrar
+    </button>
+  </div>
+</div>

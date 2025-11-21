@@ -1,0 +1,22 @@
+// config.service.ts
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable({ providedIn: 'root' })
+export class ConfigService {
+    private config: any;
+
+    constructor(private http: HttpClient) { }
+
+    loadConfig(): Promise<void> {
+        return this.http.get('/config.json')
+            .toPromise()
+            .then(cfg => {
+                this.config = cfg;
+                return; 
+            });
+    }
+
+    get apiA() { return this.config?.apiA; }
+    get apiB() { return this.config?.apiB; }
+}
