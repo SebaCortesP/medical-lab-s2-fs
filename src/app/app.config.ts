@@ -1,19 +1,21 @@
 import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { provideHttpClient, HTTP_INTERCEPTORS, withInterceptors } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { APP_INITIALIZER } from '@angular/core';
 
 import { routes } from './app.routes';
 import { JwtInterceptor } from './core/jwt-interceptor';
 import { ConfigService } from './services/config.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(),
+    // provideHttpClient(),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
     importProvidersFrom(ReactiveFormsModule),
 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

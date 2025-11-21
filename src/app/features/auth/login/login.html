@@ -1,5 +1,10 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<div class="min-h-screen flex items-center justify-center bg-cover bg-center"
+     style="background-image: url('/imgs/background.jpg');">
   <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+       <div class="flex justify-center mb-4">
+      <img src="/imgs/logo.png" alt="Logo" class="h-20 w-auto">
+    </div>
+
     <h2 class="text-2xl font-bold mb-6 text-center">Iniciar Sesión</h2>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()">

@@ -58,7 +58,7 @@ export class AuthService {
 
   /** Registro de usuario */
   register(data: any): Observable<any> {
-    const url = `${this.config.apiA}/users/register`; // URL dinámica
+    const url = `${this.config.apiA}/users`; // URL dinámica
     return this.http.post(url, data);
   }
 
