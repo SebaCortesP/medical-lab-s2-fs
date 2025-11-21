@@ -24,12 +24,16 @@ export class LabsComponent implements OnInit {
     this.loadLabs();
   }
 
-  loadLabs() {
-    this.labsService.getLabs().subscribe({
-      next: data => this.labs = data.data,
-      error: () => this.errorMsg = 'Error cargando los laboratorios'
-    });
-  }
+loadLabs() {
+  this.labsService.getLabs().subscribe({
+    next: resp => {
+      console.log("Respuesta backend:", resp);
+      this.labs = resp.data;
+    },
+    error: () => this.errorMsg = 'Error cargando los laboratorios'
+  });
+}
+
 
   createLab() {
     this.labsService.createLab(this.newLab).subscribe({
