@@ -58,7 +58,12 @@ export class AuthService {
 
   /** Registro de usuario */
   register(data: any): Observable<any> {
-    const url = `${this.config.apiA}/users`; // URL dinámica
+    const url = `${this.config.apiA}/users`;
+    return this.http.post(url, data);
+  }
+  /** Registro de usuario */
+  forgotPassword(data: any): Observable<any> {
+    const url = `${this.config.apiA}/users/forgot-password`;
     return this.http.post(url, data);
   }
 

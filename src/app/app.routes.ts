@@ -7,11 +7,13 @@ import { LoggedLayoutComponent } from './layouts/logged-layout/logged-layout';
 import { ResultsComponent } from './features/results/results/results';
 import { AnalysisManagementComponent } from './features/analysis/analysis/analysis';
 import { LabsComponent } from './features/labs/labs';
+import { ForgotPasswordComponent } from './features/auth/forgot-password/forgot-password';
 
 // exportamos la constante para poder usarla en app.config.ts
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'forgort-password', component: ForgotPasswordComponent },
   {
     path: '',
     component: LoggedLayoutComponent,
