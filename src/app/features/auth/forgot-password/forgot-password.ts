@@ -1,30 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-forgot-password',
-  imports: [ReactiveFormsModule],
+  standalone: true,  // si es standalone
+  imports: [
+    ReactiveFormsModule,
+    CommonModule  // <- necesario para *ngIf, *ngFor, etc.
+  ],
   templateUrl: './forgot-password.html',
-  styleUrl: './forgot-password.scss',
+  styleUrls: ['./forgot-password.scss'],
 })
-export class ForgotPasswordComponent implements OnInit{
-
+export class ForgotPasswordComponent implements OnInit {
   successMsg = '';
   errorMsg = '';
   loading = false;
-  forgotForm!: FormGroup; 
+  forgotForm!: FormGroup;
 
-  constructor(private fb: FormBuilder,   private authService: AuthService,
-    private router: Router) { }    
-  
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+
   ngOnInit(): void {
     this.forgotForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
     });
   }
+
   get f() {
     return this.forgotForm.controls;
   }
@@ -42,10 +45,7 @@ export class ForgotPasswordComponent implements OnInit{
         this.successMsg = 'Si el correo existe, se envió una nueva contraseña. Revisa tu bandeja.';
         this.loading = false;
         this.forgotForm.reset();
-
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
+        setTimeout(() => this.router.navigate(['/login']), 3000);
       },
       error: (err) => {
         this.errorMsg = err?.error?.message || 'Error procesando la solicitud';

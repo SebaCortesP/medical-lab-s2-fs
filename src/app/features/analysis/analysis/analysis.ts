@@ -23,6 +23,7 @@ export class AnalysisManagementComponent implements OnInit {
 
   createAnalysisForm: FormGroup;
   createResultForm: FormGroup;
+  createAssignmentForm: FormGroup;
 
   errorMsg = '';
   successMsg = '';
@@ -42,6 +43,13 @@ export class AnalysisManagementComponent implements OnInit {
       resultValue: ['', Validators.required],
       resultDetails: [''],
       resultDate: ['', Validators.required]
+    });
+
+    this.createAssignmentForm = this.fb.group({
+      patientId: ['', Validators.required],
+      labId: ['', Validators.required],
+      testType: ['', Validators.required],
+      scheduledAt: ['', Validators.required]
     });
   }
 
