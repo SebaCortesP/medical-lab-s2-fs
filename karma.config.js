@@ -1,3 +1,5 @@
+const path = require('node:path');
+
 module.exports = function(config){
     config.set({
         basePath: '',
@@ -17,11 +19,11 @@ module.exports = function(config){
             suppressAll: true
         },
         coverageReporter:{
-            dir: require('path').join(__dirname, './coverage'),
+            dir: path.join(__dirname, './coverage'),
             subdir: '.',
             reporters: [
-                {type: 'html', subdir: 'html-report'},
-                {type: 'icov', subdir: 'icov-report'}
+                { type: 'html', subdir: 'html-report' },
+                { type: 'lcov', subdir: 'lcov-report' }
             ]
         },
         reporters: ['progress', 'kjhtml'],

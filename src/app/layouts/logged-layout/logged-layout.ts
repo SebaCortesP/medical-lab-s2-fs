@@ -31,7 +31,7 @@ export class LoggedLayoutComponent implements OnInit {
   results: any[] = [];
   errorMsg = '';
   role: string | null = null;
-  constructor(private auth: AuthService, private router: Router) { }
+  constructor(private readonly auth: AuthService, private readonly router: Router) { }
   userRole: any = null;
   ngOnInit() {
     this.auth.role$.subscribe(r => {

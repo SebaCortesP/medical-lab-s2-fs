@@ -21,11 +21,11 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient);
-  private config = inject(ConfigService);
-  private roleSubject = new BehaviorSubject<string | null>(null);
+  private readonly http = inject(HttpClient);
+  private readonly config = inject(ConfigService);
+  private readonly roleSubject = new BehaviorSubject<string | null>(null);
   public role$ = this.roleSubject.asObservable();
-  private currentUserSubject = new BehaviorSubject<string | null>(null);
+  private readonly currentUserSubject = new BehaviorSubject<string | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
   constructor() {
