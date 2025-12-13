@@ -106,4 +106,80 @@ describe('ResultsComponent', () => {
     component.closeModal();
     expect(component.selectedResult).toBeNull();
   });
+
+  describe('ResultsComponent Template Branches', () => {
+  let component: ResultsComponent;
+  let fixture: ComponentFixture<ResultsComponent>;
+  let service: AnalysisServiceMock;
+
+  beforeEach(async () => {
+    service = new AnalysisServiceMock();
+
+    await TestBed.configureTestingModule({
+      imports: [ResultsComponent],
+      providers: [{ provide: AnalysisService, useValue: service }]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ResultsComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should show loading message when loading is true', () => {
+    component.loading = true;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Cargando...');
+  });
+
+  it('should show table if results exist', () => {
+    component.loading = false;
+    component.results = [
+      { analysisName: 'Hemograma', labName: 'Lab1', resultValue: 123, resultDate: '2025-12-11' }
+    ];
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const table = compiled.querySelector('table');
+    expect(table).toBeTruthy();
+    expect(table?.textContent).toContain('Hemograma');
+    expect(table?.textContent).toContain('Lab1');
+  });
+
+  it('should show "No hay resultados disponibles" if results empty', () => {
+    component.loading = false;
+    component.results = [];
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('No hay resultados disponibles');
+  });
+
+  it('should render modal if selectedResult is set', () => {
+    component.selectedResult = {
+      analysisName: 'Hemograma',
+      labName: 'Lab1',
+      resultValue: 123,
+      resultDetails: 'Normal',
+      resultDate: '2025-12-11'
+    };
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const modal = compiled.querySelector('.fixed.inset-0');
+    expect(modal).toBeTruthy();
+    expect(modal?.textContent).toContain('Detalle del Examen');
+    expect(modal?.textContent).toContain('Hemograma');
+    expect(modal?.textContent).toContain('Normal');
+  });
+
+  it('should not render modal if selectedResult is null', () => {
+    component.selectedResult = null;
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.fixed.inset-0')).toBeNull();
+  });
+});
+
 });

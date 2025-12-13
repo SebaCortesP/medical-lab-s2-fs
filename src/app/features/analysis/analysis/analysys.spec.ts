@@ -164,4 +164,78 @@ describe('AnalysisManagementComponent', () => {
     form.triggerEventHandler('ngSubmit', {});
     expect(component.submitResult).toHaveBeenCalled();
   });
+
+  describe('AnalysisManagementComponent Template Branches', () => {
+    let component: AnalysisManagementComponent;
+    let fixture: ComponentFixture<AnalysisManagementComponent>;
+    let service: AnalysisManagementServiceMock;
+
+    beforeEach(async () => {
+      service = new AnalysisManagementServiceMock();
+
+      await TestBed.configureTestingModule({
+        imports: [AnalysisManagementComponent],
+        providers: [{ provide: AnalysisManagementService, useValue: service }]
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(AnalysisManagementComponent);
+      component = fixture.componentInstance;
+    });
+
+    it('should show errorMsg and successMsg conditionally', () => {
+      component.errorMsg = 'Error test';
+      component.successMsg = '';
+      fixture.detectChanges();
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.textContent).toContain('Error test');
+
+      component.errorMsg = '';
+      component.successMsg = 'Éxito test';
+      fixture.detectChanges();
+      expect(compiled.textContent).toContain('Éxito test');
+    });
+
+    it('should display empty message when no analyses', () => {
+      component.analyses = [];
+      fixture.detectChanges();
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.textContent).toContain('No hay resultados disponibles'); // si tu template tiene mensaje para lista vacía, ajusta texto
+    });
+
+    it('should handle loadAnalyses error', fakeAsync(() => {
+      service.getAnalyses.and.returnValue(throwError(() => new Error('fail')));
+      component.loadAnalyses();
+      tick();
+      expect(component.errorMsg).toBe('Error al cargar los análisis');
+      expect(component.loadingAnalyses).toBeFalse();
+    }));
+
+    it('should handle loadLabs error', fakeAsync(() => {
+      service.getLabs.and.returnValue(throwError(() => new Error('fail')));
+      component.loadLabs();
+      tick();
+      expect(component.errorMsg).toBe('Error al cargar laboratorios');
+      expect(component.loadingLabs).toBeFalse();
+    }));
+
+    it('should handle loadPacientes error', fakeAsync(() => {
+      service.getPacientes.and.returnValue(throwError(() => new Error('fail')));
+      component.loadPacients();
+      tick();
+      expect(component.errorMsg).toBe('No se pudieron cargar los pacientes');
+    }));
+
+    it('should not submitAnalysis if form invalid', () => {
+      component.createAnalysisForm.reset();
+      component.submitAnalysis();
+      expect(service.createAnalysis).not.toHaveBeenCalled();
+    });
+
+    it('should not submitResult if form invalid', () => {
+      component.createResultForm.reset();
+      component.submitResult();
+      expect(service.createResult).not.toHaveBeenCalled();
+    });
+  });
+
 });

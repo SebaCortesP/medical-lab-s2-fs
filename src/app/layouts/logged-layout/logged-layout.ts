@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth';
 import { CommonModule } from '@angular/common';
@@ -25,7 +25,7 @@ interface JwtPayload {
     RouterLink
   ]
 })
-export class LoggedLayoutComponent {
+export class LoggedLayoutComponent implements OnInit {
   loading = true;
   pacient: any = null;
   results: any[] = [];
