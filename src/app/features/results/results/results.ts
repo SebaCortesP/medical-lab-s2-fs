@@ -27,7 +27,7 @@ export class ResultsComponent implements OnInit {
 
   selectedResult: any = null;
 
-  constructor(private analysisService: AnalysisService) { }
+  constructor(private readonly analysisService: AnalysisService) { }
 
   ngOnInit() {
     this.loadData();

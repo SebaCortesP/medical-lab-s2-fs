@@ -25,9 +25,9 @@ export class RegisterComponent {
   loading = false;
 
   constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
+    private readonly fb: FormBuilder,
+    private readonly authService: AuthService,
+    private readonly router: Router
   ) {
     this.registerForm = this.fb.group({
       name: ['', Validators.required],

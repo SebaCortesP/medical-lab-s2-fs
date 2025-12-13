@@ -7,10 +7,10 @@ import { ConfigService } from '../services/config.service';
   providedIn: 'root'
 })
 export class AnalysisManagementService {
-  private http = inject(HttpClient);
-  private config = inject(ConfigService);
-  private api = this.config.apiB;
-  private apiA = this.config.apiA;
+  private readonly http = inject(HttpClient);
+  private readonly config = inject(ConfigService);
+  private readonly api = this.config.apiB;
+  private readonly apiA = this.config.apiA;
 
   // Analyses
   getAnalyses(): Observable<any[]> {

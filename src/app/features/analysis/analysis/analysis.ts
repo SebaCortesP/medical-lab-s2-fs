@@ -11,8 +11,8 @@ import { AnalysisManagementService } from '../../../services/analysis-management
   styleUrls: ['./analysis.scss']
 })
 export class AnalysisManagementComponent implements OnInit {
-  private service = inject(AnalysisManagementService);
-  private fb = inject(FormBuilder);
+  private readonly service = inject(AnalysisManagementService);
+  private readonly fb = inject(FormBuilder);
 
   analyses: any[] = [];
   labs: any[] = [];

@@ -7,10 +7,10 @@ import { ConfigService } from './config.service';
   providedIn: 'root'
 })
 export class AnalysisService {
-  private config = inject(ConfigService);
-  private apiLab = this.config.apiB;
+  private readonly config = inject(ConfigService);
+  private readonly apiLab = this.config.apiB;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getPacientByUserId(userId: number): Observable<any> {
     return this.http.get(`${this.apiLab}/pacients/by-user/${userId}`);

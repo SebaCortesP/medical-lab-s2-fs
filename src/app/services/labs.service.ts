@@ -19,10 +19,10 @@ export interface ApiResponse<T> {
   providedIn: 'root',
 })
 export class LabsService {
-  private config = inject(ConfigService);
-  private apiLab = this.config.apiB + '/labs';
+  private readonly config = inject(ConfigService);
+  private readonly apiLab = this.config.apiB + '/labs';
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   // Crear Lab
   createLab(lab: Lab): Observable<any> {

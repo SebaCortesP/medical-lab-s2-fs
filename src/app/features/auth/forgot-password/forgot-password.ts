@@ -20,7 +20,7 @@ export class ForgotPasswordComponent implements OnInit {
   loading = false;
   forgotForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  constructor(private readonly fb: FormBuilder, private readonly authService: AuthService, private readonly router: Router) {}
 
   ngOnInit(): void {
     this.forgotForm = this.fb.group({

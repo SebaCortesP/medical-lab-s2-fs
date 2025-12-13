@@ -10,7 +10,7 @@ import { AuthService } from './core/auth';
 })
 export class App implements OnInit{
   protected readonly title = signal('medical-lab');
-  constructor(private auth: AuthService) { }
+  constructor(private readonly auth: AuthService) { }
 
   ngOnInit() {
     this.auth.loadUserFromToken();

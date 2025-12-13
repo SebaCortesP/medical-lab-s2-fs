@@ -18,7 +18,7 @@ export class LabsComponent implements OnInit {
   errorMsg = '';
   successMsg = '';
 
-  constructor(private labsService: LabsService) {}
+  constructor(private readonly labsService: LabsService) {}
 
   ngOnInit(): void {
     this.loadLabs();
