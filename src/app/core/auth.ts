@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ConfigService } from '../services/config.service';
 import { jwtDecode } from 'jwt-decode';
+import { decodeJwt } from './jwt-util';
 
 interface TokenPayload {
   sub: string;
@@ -89,23 +90,20 @@ export class AuthService {
     return payload.usuarioId; // o como venga en tu token
   }
 
-
   loadUserFromToken(): void {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    this.roleSubject.next(null);
-    return;
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      this.roleSubject.next(null);
+      return;
+    }
+
+    try {
+      const decoded: any = decodeJwt(token);
+      this.roleSubject.next(decoded.role ?? null);
+    } catch {
+      this.roleSubject.next(null);
+    }
   }
-
-  try {
-    const decoded: any = jwtDecode(token);
-
-    const role = decoded.role || decoded.userRole || null;
-
-    this.roleSubject.next(role); // <-- repuebla el rol después de refrescar
-  } catch (err) {
-    this.roleSubject.next(null);
-  }
-}
 
 }

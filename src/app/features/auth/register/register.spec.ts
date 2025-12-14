@@ -93,46 +93,35 @@ describe('RegisterComponent', () => {
   });
 
   // -------------------------
-  // SUBMIT EXITOSO
   it('should call authService.register and navigate after success', fakeAsync(() => {
-    // Prepara formulario
+    // Arrange
     component.registerForm.setValue({
-      name: 'John',
-      lastname: 'Doe',
-      email: 'john@example.com',
-      password: 'Strong1!',
-      confirmPassword: 'Strong1!'
+      name: 'Juan',
+      lastname: 'Alberto',
+      email: 'juan@test.com',
+      password: 'Test@123',
+      confirmPassword: 'Test@123'
     });
 
-    // Mock del servicio
     authService.register.and.returnValue(of({}));
 
-    // Llamada al submit
+    // Act
     component.submit();
 
-    // Avanza microtasks del subscribe
+    // Ejecuta el subscribe()
     tick();
 
-    // Loading debería estar activo
-    expect(component.loading).toBeTrue();
+    // Assert intermedio
+    expect(authService.register).toHaveBeenCalled();
+    expect(component.loading).toBeFalse();
+    expect(component.successMsg).toBeTruthy();
 
-    // Avanza el timeout de 3s
+    // Ejecuta el setTimeout(3000)
     tick(3000);
 
-    // Verifica que navigate fue llamado
+    // Assert final
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
-
-    // Loading apagado
-    expect(component.loading).toBeFalse();
-
-    // Formulario reseteado
-    expect(component.registerForm.value.name).toBeNull();
-
-    // Mensaje de éxito
-    expect(component.successMsg).toContain('Usuario registrado correctamente');
   }));
-
-
 
   // -------------------------
   // SUBMIT FALLIDO

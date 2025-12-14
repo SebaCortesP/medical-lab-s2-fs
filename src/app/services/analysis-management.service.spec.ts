@@ -1,19 +1,19 @@
 import { TestBed } from '@angular/core/testing';
-import { AnalysisManagementService } from './analysis-management.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
+import { AnalysisManagementService } from './analysis-management.service';
 import { ConfigService } from './config.service';
 
 describe('AnalysisManagementService', () => {
   let service: AnalysisManagementService;
   let httpMock: HttpTestingController;
-  let configMock: Partial<ConfigService>;
+
+  const configMock: ConfigService = {
+    apiB: 'https://api-b.test',
+    apiA: 'https://api-a.test'
+  } as ConfigService;
 
   beforeEach(() => {
-    configMock = {
-      apiB: 'https://api-b.test',
-      apiA: 'https://api-a.test'
-    };
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
@@ -30,16 +30,19 @@ describe('AnalysisManagementService', () => {
     httpMock.verify();
   });
 
+  // ---------------------------------------
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
+  // ---------------------------------------
   it('getAnalyses should return data array', () => {
-    const dummyResponse = { data: [{ id: 1, name: 'Hemograma' }] };
+    const dummyResponse = {
+      data: [{ id: 1, name: 'Hemograma' }]
+    };
 
     service.getAnalyses().subscribe(res => {
-      expect(res.length).toBe(1);
-      expect(res[0].name).toBe('Hemograma');
+      expect(res).toEqual(dummyResponse.data);
     });
 
     const req = httpMock.expectOne(`${configMock.apiB}/analyses`);
@@ -47,8 +50,14 @@ describe('AnalysisManagementService', () => {
     req.flush(dummyResponse);
   });
 
+  // ---------------------------------------
   it('createAnalysis should POST data', () => {
-    const payload = { name: 'Hemograma', price: 10000, durationMinutes: 30, labId: 1 };
+    const payload = {
+      name: 'Hemograma',
+      price: 10000,
+      durationMinutes: 30,
+      labId: 1
+    };
 
     service.createAnalysis(payload).subscribe(res => {
       expect(res).toEqual(payload);
@@ -60,6 +69,7 @@ describe('AnalysisManagementService', () => {
     req.flush(payload);
   });
 
+  // ---------------------------------------
   it('createResult should POST data', () => {
     const payload = {
       pacientId: 1,
@@ -80,12 +90,14 @@ describe('AnalysisManagementService', () => {
     req.flush(payload);
   });
 
+  // ---------------------------------------
   it('getLabs should return labs array', () => {
-    const dummyResponse = { data: [{ id: 1, name: 'Lab 1' }] };
+    const dummyResponse = {
+      data: [{ id: 1, name: 'Lab 1' }]
+    };
 
     service.getLabs().subscribe(res => {
-      expect(res.length).toBe(1);
-      expect(res[0].name).toBe('Lab 1');
+      expect(res).toEqual(dummyResponse.data);
     });
 
     const req = httpMock.expectOne(`${configMock.apiB}/labs`);
@@ -93,15 +105,19 @@ describe('AnalysisManagementService', () => {
     req.flush(dummyResponse);
   });
 
+  // ---------------------------------------
   it('getPacientes should return pacientes array', () => {
-    const dummyResponse = { data: [{ id: 1, name: 'Juan', lastname: 'Perez' }] };
+    const dummyResponse = {
+      data: [{ id: 1, name: 'Juan', lastname: 'Perez' }]
+    };
 
     service.getPacientes().subscribe(res => {
-      expect(res.length).toBe(1);
-      expect(res[0].name).toBe('Juan');
+      expect(res).toEqual(dummyResponse.data);
     });
 
-    const req = httpMock.expectOne(`${configMock.apiA}/users/role/paciente`);
+    const req = httpMock.expectOne(
+      `${configMock.apiA}/users/role/paciente`
+    );
     expect(req.request.method).toBe('GET');
     req.flush(dummyResponse);
   });

@@ -3,9 +3,10 @@ import { AuthService } from './auth';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { ConfigService } from '../services/config.service';
 import { of } from 'rxjs';
-import * as jwtDecodeModule from 'jwt-decode';
+import * as jwtDecodeLib from 'jwt-decode';
 
 describe('AuthService', () => {
+
   let service: AuthService;
   let httpMock: HttpTestingController;
   let configService: ConfigService;
@@ -28,6 +29,13 @@ describe('AuthService', () => {
     // Limpiar localStorage antes de cada test
     localStorage.clear();
   });
+  function buildToken(payload: object): string {
+    return (
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+      btoa(JSON.stringify(payload)) +
+      '.signature'
+    );
+  }
 
   afterEach(() => {
     httpMock.verify();
@@ -37,23 +45,25 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should login and set token and role', () => {
-    const fakeToken = 'fake.jwt.token';
-    const fakeResponse = { success: true, message: 'ok', data: fakeToken };
-    const fakeDecoded = { role: 'admin', usuarioId: 1 };
+  it('should login and store token and role', () => {
+    const token = buildToken({ role: 'admin', usuarioId: 10 });
 
-    spyOn(jwtDecodeModule, 'jwtDecode').and.returnValue(fakeDecoded);
-
-    service.login('test@test.com', '1234').subscribe(res => {
-      expect(res).toEqual(fakeResponse);
-      expect(localStorage.getItem('token')).toBe(fakeToken);
-      service.role$.subscribe(role => expect(role).toBe('admin'));
-      service.currentUser$.subscribe(token => expect(token).toBe(fakeToken));
-    });
+    service.login('test@mail.com', '1234').subscribe();
 
     const req = httpMock.expectOne(`${configService.apiA}/users/login`);
     expect(req.request.method).toBe('POST');
-    req.flush(fakeResponse);
+
+    req.flush({
+      success: true,
+      message: 'ok',
+      data: token,
+    });
+
+    expect(localStorage.getItem('token')).toBe(token);
+
+    service.role$.subscribe(role => {
+      expect(role).toBe('admin');
+    });
   });
 
   it('should register user', () => {
@@ -90,42 +100,54 @@ describe('AuthService', () => {
     expect(service.token).toBe('abc');
   });
 
-  it('should return true for isLoggedIn', () => {
-    localStorage.setItem('token', 'abc');
-    expect(service.isLoggedIn()).toBeTrue();
-  });
-
   it('should return false for isLoggedIn when no token', () => {
     expect(service.isLoggedIn()).toBeFalse();
   });
 
-  it('should decode userId from token', () => {
-    const fakeToken = 'fake.jwt.token';
-    localStorage.setItem('token', fakeToken);
-    spyOn(jwtDecodeModule, 'jwtDecode').and.returnValue({ usuarioId: 123 });
-    expect(service.userId).toBe(123);
-  });
 
-  it('loadUserFromToken should set role if token valid', () => {
-    const fakeToken = 'fake.jwt.token';
-    localStorage.setItem('token', fakeToken);
-    spyOn(jwtDecodeModule, 'jwtDecode').and.returnValue({ role: 'admin' });
+  it('loadUserFromToken should set role if token is valid', () => {
+    const token = buildToken({ role: 'pacient' });
+    localStorage.setItem('token', token);
 
     service.loadUserFromToken();
-    service.role$.subscribe(role => expect(role).toBe('admin'));
+
+    service.role$.subscribe(role => {
+      expect(role).toBe('pacient');
+    });
   });
+
 
   it('loadUserFromToken should set role null if no token', () => {
     service.loadUserFromToken();
     service.role$.subscribe(role => expect(role).toBeNull());
   });
 
-  it('loadUserFromToken should set role null if decode fails', () => {
-    const fakeToken = 'bad.token';
-    localStorage.setItem('token', fakeToken);
-    spyOn(jwtDecodeModule, 'jwtDecode').and.throwError('Invalid token');
+  it('loadUserFromToken should set role null if token is invalid', () => {
+    localStorage.setItem('token', 'invalid.token.value');
 
     service.loadUserFromToken();
-    service.role$.subscribe(role => expect(role).toBeNull());
+
+    service.role$.subscribe(role => {
+      expect(role).toBeNull();
+    });
   });
+
+  it('should return userId from token', () => {
+    const token = buildToken({ usuarioId: 99 });
+    localStorage.setItem('token', token);
+
+    expect(service.userId).toBe(99);
+  });
+
+
+  it('isLoggedIn should return true if token exists', () => {
+    localStorage.setItem('token', 'dummy');
+    expect(service.isLoggedIn()).toBeTrue();
+  });
+
+  it('isLoggedIn should return false if no token', () => {
+    localStorage.removeItem('token');
+    expect(service.isLoggedIn()).toBeFalse();
+  });
+
 });

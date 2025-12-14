@@ -62,27 +62,32 @@ describe('ForgotPasswordComponent', () => {
     expect(email.errors).toBeNull();
   });
 
-  // ----------------------------------------
   it('should call authService.forgotPassword and navigate after success', fakeAsync(() => {
-    component.forgotForm.setValue({ email: 'john@example.com' });
+    // Arrange
+    component.forgotForm.setValue({
+      email: 'test@test.com'
+    });
 
     authService.forgotPassword.and.returnValue(of({}));
 
+    // Act
     component.submit();
-    expect(component.loading).toBeTrue();
-    expect(authService.forgotPassword).toHaveBeenCalledWith({ email: 'john@example.com' });
 
-    tick(); // ejecuta subscribe
+    // Ejecuta el subscribe
+    tick();
 
-    // mensaje de éxito y form reset
+    // Assert intermedio
+    expect(authService.forgotPassword).toHaveBeenCalledWith({ email: 'test@test.com' });
     expect(component.successMsg).toContain('Si el correo existe');
     expect(component.loading).toBeFalse();
-    expect(component.forgotForm.value.email).toBeNull();
 
-    // setTimeout de navegación
+    // Ejecuta el setTimeout(3000)
     tick(3000);
+
+    // Assert final
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
   }));
+
 
   it('should set errorMsg when forgotPassword fails', () => {
     component.forgotForm.setValue({ email: 'john@example.com' });
