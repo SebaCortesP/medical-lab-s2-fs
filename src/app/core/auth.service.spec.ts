@@ -150,4 +150,50 @@ describe('AuthService', () => {
     expect(service.isLoggedIn()).toBeFalse();
   });
 
+  it('should return null userId if token is invalid', () => {
+    localStorage.setItem('token', 'invalid.token.value');
+    expect(service.userId).toBeNull();
+  });
+
+  it('loadUserFromToken should set role null if token has no role', () => {
+    const token = buildToken({ usuarioId: 1 });
+    localStorage.setItem('token', token);
+
+    service.loadUserFromToken();
+
+    service.role$.subscribe(role => {
+      expect(role).toBeNull();
+    });
+  });
+
+  it('should set role null on login if token has no role', () => {
+    const token = buildToken({ usuarioId: 10 });
+
+    service.login('test@mail.com', '1234').subscribe();
+
+    const req = httpMock.expectOne(`${configService.apiA}/users/login`);
+    req.flush({
+      success: true,
+      message: 'ok',
+      data: token,
+    });
+
+    service.role$.subscribe(role => {
+      expect(role).toBeNull();
+    });
+  });
+
+  it('should return null userId if token has no usuarioId', () => {
+    const token = buildToken({ role: 'admin' }); // sin usuarioId
+    localStorage.setItem('token', token);
+
+    expect(service.userId).toBeNull();
+  });
+
+  it('should return null userId if token is invalid', () => {
+    localStorage.setItem('token', 'invalid.token.value');
+
+    expect(service.userId).toBeNull();
+  });
+
 });

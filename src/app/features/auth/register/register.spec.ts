@@ -143,4 +143,23 @@ describe('RegisterComponent', () => {
     expect(component.errorMsg).toBe('Email ya registrado');
     expect(component.loading).toBeFalse();
   });
+  it('should set default error message when backend error has no message', () => {
+    component.registerForm.setValue({
+      name: 'John',
+      lastname: 'Doe',
+      email: 'john@test.com',
+      password: '123456A.!',
+      confirmPassword: '123456A.!'
+    });
+
+    authService.register.and.returnValue(
+      throwError(() => ({}))
+    );
+
+    component.submit();
+
+    expect(component.errorMsg).toBe('Error registrando usuario');
+    expect(component.loading).toBeFalse();
+  });
+
 });

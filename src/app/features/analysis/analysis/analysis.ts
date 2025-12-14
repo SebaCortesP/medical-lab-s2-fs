@@ -128,9 +128,9 @@ export class AnalysisManagementComponent implements OnInit {
       pacientId: Number(formValue.pacientId),
       analysisId: Number(formValue.analysisId),
       labId: Number(formValue.labId),
-      resultValue: formValue.resultValue || '',
+      resultValue: formValue.resultValue,
       resultDetails: formValue.resultDetails || '',
-      resultDate: formValue.resultDate || new Date().toISOString().split('T')[0]
+      resultDate: formValue.resultDate
     };
 
     this.service.createResult(payload).subscribe({

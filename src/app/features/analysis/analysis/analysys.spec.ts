@@ -155,4 +155,107 @@ describe('AnalysisManagementComponent', () => {
 
     expect(input.value).toBe('Hemograma');
   });
+
+  it('should load analyses successfully', () => {
+    service.getAnalyses.and.returnValue(of([{ id: 1 }]));
+
+    component.loadAnalyses();
+
+    expect(component.loadingAnalyses).toBeFalse();
+    expect(component.analyses.length).toBe(1);
+  });
+
+  it('should set errorMsg when loadAnalyses fails', () => {
+    service.getAnalyses.and.returnValue(throwError(() => ({})));
+
+    component.loadAnalyses();
+
+    expect(component.errorMsg).toBe('Error al cargar los análisis');
+    expect(component.loadingAnalyses).toBeFalse();
+  });
+
+  it('should set errorMsg when loadPacients fails', () => {
+    service.getPacientes.and.returnValue(throwError(() => ({})));
+
+    component.loadPacients();
+
+    expect(component.errorMsg).toBe('No se pudieron cargar los pacientes');
+  });
+
+  it('should not submit analysis if form is invalid', () => {
+    component.createAnalysisForm.reset();
+
+    component.submitAnalysis();
+
+    expect(service.createAnalysis).not.toHaveBeenCalled();
+  });
+
+  it('should create analysis successfully', () => {
+    service.createAnalysis.and.returnValue(of({}));
+    service.getAnalyses.and.returnValue(of([]));
+
+    component.createAnalysisForm.setValue({
+      name: 'Test',
+      price: 100,
+      durationMinutes: 30,
+      labId: 1
+    });
+
+    component.submitAnalysis();
+
+    expect(component.successMsg).toBe('Análisis creado correctamente');
+    expect(component.errorMsg).toBe('');
+  });
+
+  it('should set errorMsg when createAnalysis fails', () => {
+    service.createAnalysis.and.returnValue(throwError(() => ({})));
+
+    component.createAnalysisForm.setValue({
+      name: 'Test',
+      price: 100,
+      durationMinutes: 30,
+      labId: 1
+    });
+
+    component.submitAnalysis();
+
+    expect(component.errorMsg).toBe('Error al crear el análisis');
+  });
+
+
+
+  it('should set errorMsg when createResult fails', () => {
+    service.createResult.and.returnValue(throwError(() => ({})));
+
+    component.createResultForm.setValue({
+      pacientId: 1,
+      analysisId: 1,
+      labId: 1,
+      resultValue: 'OK',
+      resultDetails: '',
+      resultDate: '2024-01-01'
+    });
+
+    component.submitResult();
+
+    expect(component.errorMsg).toBe('Error al crear el resultado');
+  });
+
+  it('should set errorMsg and stop loading when loadLabs fails', fakeAsync(() => {
+    // Arrange
+    service.getLabs.and.returnValue(
+      throwError(() => new Error('API error'))
+    );
+
+    // Act
+    component.loadLabs();
+    tick();
+
+    // Assert
+    expect(service.getLabs).toHaveBeenCalled();
+    expect(component.errorMsg).toBe('Error al cargar laboratorios');
+    expect(component.loadingLabs).toBeFalse();
+  }));
+
+
 });

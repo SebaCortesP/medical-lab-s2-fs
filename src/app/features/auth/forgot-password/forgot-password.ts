@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-forgot-password',
-  standalone: true,  // si es standalone
+  standalone: true, 
   imports: [
     ReactiveFormsModule,
     CommonModule,

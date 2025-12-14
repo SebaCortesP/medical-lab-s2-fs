@@ -21,8 +21,8 @@ describe('ForgotPasswordComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        ForgotPasswordComponent,           // componente standalone
-        RouterTestingModule.withRoutes([]) // rutas vacías para test
+        ForgotPasswordComponent,
+        RouterTestingModule.withRoutes([])
       ],
       providers: [
         { provide: AuthService, useValue: authService }
@@ -33,7 +33,7 @@ describe('ForgotPasswordComponent', () => {
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
 
-    spyOn(router, 'navigate'); // espiamos navigate una vez
+    spyOn(router, 'navigate');
 
     fixture.detectChanges();
   });
@@ -81,7 +81,6 @@ describe('ForgotPasswordComponent', () => {
     expect(component.successMsg).toContain('Si el correo existe');
     expect(component.loading).toBeFalse();
 
-    // Ejecuta el setTimeout(3000)
     tick(3000);
 
     // Assert final
@@ -100,4 +99,69 @@ describe('ForgotPasswordComponent', () => {
     expect(component.errorMsg).toBe('Correo no encontrado');
     expect(component.loading).toBeFalse();
   });
+
+
+  it('should NOT call authService.forgotPassword if form is invalid', () => {
+    // Arrange
+    component.forgotForm.setValue({
+      email: ''
+    });
+
+    // Act
+    component.submit();
+
+    // Assert
+    expect(authService.forgotPassword).not.toHaveBeenCalled();
+    expect(component.loading).toBeFalse();
+    expect(component.successMsg).toBe('');
+    expect(component.errorMsg).toBe('');
+  });
+
+  it('should not call service if form is invalid', () => {
+    // Arrange: formulario inválido
+    component.forgotForm.setValue({ email: '' }); // inválido
+
+    // Act
+    component.submit();
+
+    // Assert
+    expect(component.loading).toBeFalse();
+    expect(authService.forgotPassword).not.toHaveBeenCalled();
+    expect(component.successMsg).toBe('');
+    expect(component.errorMsg).toBe('');
+  });
+
+  it('should set errorMsg and stop loading on service error', () => {
+    // Arrange
+    component.forgotForm.setValue({ email: 'test@test.com' });
+
+    authService.forgotPassword.and.returnValue(
+      throwError(() => ({
+        error: { message: 'Correo no válido' }
+      }))
+    );
+
+    // Act
+    component.submit();
+
+    // Assert
+    expect(authService.forgotPassword).toHaveBeenCalled();
+    expect(component.errorMsg).toBe('Correo no válido');
+    expect(component.loading).toBeFalse();
+  });
+
+  it('should use default error message when backend error has no message', () => {
+    component.forgotForm.setValue({ email: 'test@test.com' });
+
+    authService.forgotPassword.and.returnValue(
+      throwError(() => ({}))
+    );
+
+    component.submit();
+
+    expect(component.errorMsg).toBe('Error procesando la solicitud');
+    expect(component.loading).toBeFalse();
+  });
+
+
 });

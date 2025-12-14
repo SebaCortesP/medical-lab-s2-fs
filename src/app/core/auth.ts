@@ -86,9 +86,15 @@ export class AuthService {
 
   get userId(): number | null {
     if (!this.token) return null;
-    const payload = jwtDecode<TokenPayload>(this.token);
-    return payload.usuarioId; // o como venga en tu token
+
+    try {
+      const payload = jwtDecode<TokenPayload>(this.token);
+      return payload.usuarioId ?? null;
+    } catch {
+      return null;
+    }
   }
+
 
   loadUserFromToken(): void {
     const token = localStorage.getItem('token');
