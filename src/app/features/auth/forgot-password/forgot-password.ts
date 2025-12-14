@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth';
 import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,  // si es standalone
   imports: [
     ReactiveFormsModule,
-    CommonModule  // <- necesario para *ngIf, *ngFor, etc.
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './forgot-password.html',
   styleUrls: ['./forgot-password.scss'],

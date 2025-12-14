@@ -10,7 +10,7 @@ import * as jwt from 'jwt-decode';
 
 // Mock de AuthService
 class AuthServiceMock {
-    private roleSubject = new BehaviorSubject<string>('user');
+    private readonly roleSubject = new BehaviorSubject<string>('user');
     role$ = this.roleSubject.asObservable();
 
     logout = jasmine.createSpy('logout');

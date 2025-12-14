@@ -4,9 +4,9 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
-    private readonly config: any;
+    private config: any;
 
-    constructor(private http: HttpClient) { }
+    constructor(private readonly http: HttpClient) { }
 
     loadConfig(): Promise<void> {
         return this.http.get('/config.json')
