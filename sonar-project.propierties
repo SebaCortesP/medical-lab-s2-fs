@@ -1,11 +1,11 @@
 # Propiedades obligatorias
-sonar.projectKey=medical-lab-project
+sonar.projectKey=medical-lab
 sonar.projectName=Medical Lab Angular App
 sonar.projectVersion=1.0
 
 # Conexión a SonarQube (si no se pasan por la línea de comandos)
 sonar.host.url=http://localhost:9000
-sonar.token=sqp_6d3ba33a562ee57e2d1f1d93f303ce622a2a2545
+sonar.token=sqp_b419ffc2b8fe23a049411560fd7f48556ef67ff1
 
 # Directorios de análisis
 sonar.sources=src

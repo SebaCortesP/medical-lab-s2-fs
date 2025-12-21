@@ -116,7 +116,7 @@ describe('AnalysisManagementService', () => {
     });
 
     const req = httpMock.expectOne(
-      `${configMock.apiA}/users/role/paciente`
+      `${configMock.apiA}/pacients`
     );
     expect(req.request.method).toBe('GET');
     req.flush(dummyResponse);

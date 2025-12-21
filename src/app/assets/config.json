@@ -1,4 +1,5 @@
 {
   "apiA": "http://localhost:8081",
-  "apiB": "http://localhost:8090"
+  "apiB": "http://localhost:8090",
+  "apiC": "http://localhost:8666"
 }

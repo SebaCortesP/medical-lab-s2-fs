@@ -9,6 +9,7 @@ import { ConfigService } from './config.service';
 export class AnalysisService {
   private readonly config = inject(ConfigService);
   private readonly apiLab = this.config.apiB;
+  private readonly apiResult = this.config.apiC;
 
   constructor(private readonly http: HttpClient) {}
 
@@ -17,6 +18,6 @@ export class AnalysisService {
   }
 
   getResultsByUser(userId: number): Observable<any> {
-    return this.http.get(`${this.apiLab}/results/by-user/${userId}`);
+    return this.http.get(`${this.apiResult}/results/by-user/${userId}`);
   }
 }

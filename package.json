@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "sonar": "sonar-scanner -Dsonar.login=sqp_b419ffc2b8fe23a049411560fd7f48556ef67ff1"
   },
   "prettier": {
     "printWidth": 100,

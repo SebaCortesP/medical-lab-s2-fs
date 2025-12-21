@@ -11,6 +11,7 @@ export class AnalysisManagementService {
   private readonly config = inject(ConfigService);
   private readonly api = this.config.apiB;
   private readonly apiA = this.config.apiA;
+  private readonly apiC = this.config.apiC;
 
   // Analyses
   getAnalyses(): Observable<any[]> {
@@ -36,7 +37,7 @@ export class AnalysisManagementService {
   }
 
   getPacientes(): Observable<any[]> {
-    return this.http.get<any>(`${this.apiA}/users/role/paciente`).pipe(
+    return this.http.get<any>(`${this.apiA}/pacients`).pipe(
       map(res => res.data) // extraemos la propiedad data
     );
   }

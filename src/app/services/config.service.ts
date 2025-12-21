@@ -19,4 +19,5 @@ export class ConfigService {
 
     get apiA() { return this.config?.apiA; }
     get apiB() { return this.config?.apiB; }
+    get apiC() { return this.config?.apiC; }
 }
